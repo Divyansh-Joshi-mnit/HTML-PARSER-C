@@ -31,3 +31,59 @@
 ./html_parser --input sample.html --show-tree
 ./html_parser --validate-only --input index.html
 ./html_parser --tokens --input test.html
+
+## 🧠 Architecture Overview
+
+````markdown
+📦 HTML-Parser-C/
+│
+├── include/                     # Header files
+│   ├── lexer.h
+│   ├── parser.h
+│   ├── dom.h
+│   └── utils.h
+│
+├── src/                         # Source code files
+│   ├── lexer.c
+│   ├── parser.c
+│   ├── dom.c
+│   └── main.c
+│
+├── tests/                       # Test HTML files and validation cases
+│   ├── valid.html
+│   └── invalid.html
+│
+├── docs/                        # Documentation (grammar, design notes)
+│   ├── grammar.txt
+│   └── design.md
+│
+├── Makefile                     # For building and cleaning project
+├── README.md                    # Project overview
+└── LICENSE                      # License file (optional)
+
+
+### 🧩 **Core Components**
+
+#### 1. Lexer (`src/lexer.c`)
+- **Responsibility:** Tokenizes the raw HTML input into a stream of tokens.  
+- **Tokens include:**
+  - Opening tags (e.g. `<div>`)
+  - Closing tags (e.g. `</div>`)
+  - Self-closing tags (e.g. `<br />`)
+  - Attributes and their values
+  - Text nodes (content between tags)
+- **Error handling:**
+  - Detects malformed tag openings (`<div <p>`), missing closing brackets, or illegal characters.
+- **Output:** A list of tokens passed to the parser.
+
+---
+
+#### 2. Parser (`src/parser.c`)
+- **Responsibility:** Implements a **Recursive Descent Parser** that follows a defined CFG for HTML.
+- **Key Functions:**
+  - `parseDocument()` → Entry point for parsing the full HTML.
+  - `parseElement()` → Handles nested tags recursively.
+  - `parseAttributes()` → Parses attributes inside an opening tag.
+  - `parseTextNode()` → Handles textual content.
+- **Grammar Rules (Simplified):**
+
